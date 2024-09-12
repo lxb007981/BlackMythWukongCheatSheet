@@ -11,5 +11,7 @@ export default defineConfig({
     ssr: {
       noExternal: ["beercss"]
     }
-  }
+  },
+  outDir: 'public',
+  publicDir: 'static',
 });

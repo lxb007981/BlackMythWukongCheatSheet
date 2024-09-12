@@ -1,45 +1,14 @@
-import itemData from './item_data.json';
 
-// Preprocess the data list
-export function processJSON(data, type='names') {
-    if (type === 'names') {
+export function processJSON(data, type) {
+    if (type === 'items') {
         data.forEach(category => {
             category.totalCount = category.items.length;
-            category.itemData = category.items
-                  .map(name => {
-                    const items = itemData.filter(item => item.name === name);
-                    if (items.length === 0) {
-                        console.warn(`Item ${name} not found`);
-                        return undefined;
-                    } else if (items.length > 1) {
-                        console.warn(`Item ${name} is ambiguous`, items.map(item => item.id));
-                    }
-                    const item = items[0];
-                    try {
-                        // set class name for Elden Ring
-                        item.class_name = item.type;
-                        if (item.is_dlc) {item.class_name += ' dlc01';}
-                        if (item.is_legendary) {item.class_name += ' legendary';}
-                        if (item.is_cut_content) {item.class_name += ' cut_content';}
-                        return item;
-                    } catch (e) {
-                        console.log(e);
-                    }
-                  })
-                  .filter(item => item !== undefined);
-        });
+            category.itemData = category.items.map(item => ({ name: item, class_name: category.name, id: item }));
+        })
     } else if (type === 'bosses') {
         data.forEach(category => {
-            category.totalCount = category.bosses.length;
-            category.itemData = category.bosses
-                .map(boss => {
-                    const item = {};
-                    item.name = boss.boss;
-                    item.id = boss.flag_id.toString(16).toUpperCase();
-                    item.class_name = "boss";
-                    return item;
-                });
-            category.name = category["region_name"]
+            category.totalCount = category.entries.length;
+            category.itemData = category.entries.map(entry => ({ name: entry, class_name: category.name, id: entry }));
         })
     } else if (type === 'Walkthrough') {
         data.forEach(category => {
@@ -49,34 +18,7 @@ export function processJSON(data, type='names') {
                     const item = {};
                     item.name = event.text;
                     item.id = stringToHash(event.text);
-                    item.class_name = item.class;
-                    return item;
-                })
-        })
-    } else if (type === 'Quest') {
-        // Walkthrough Version 2
-        data.forEach(category => {
-            category.totalCount = category.quests.length;
-            category.itemData = category.quests
-                .map(quest => {
-                    const item = {};
-                    item.name = quest.text;
-                    item.id = quest.quest_id;
-                    item.class_name = quest.quest_type;
-                    item.side_name = quest.side_name? quest.side_name: null;
-                    item.options = quest.options;
-                    return item;
-                })
-        })
-    } else if (type === 'Collection') {
-        data.forEach(category => {
-            category.totalCount = category.items.length;
-            category.itemData = category.items
-                .map(location => {
-                    const item = {};
-                    item.name = location;
-                    item.id = stringToHash(location);
-                    item.class_name = "location";
+                    item.class_name = category.name
                     return item;
                 })
         })

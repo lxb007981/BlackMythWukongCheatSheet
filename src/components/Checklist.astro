@@ -9,7 +9,7 @@ interface Props {
     multicols?: number;
 }
 
-const { collection, type='names', searchable, multicols = 1 } = Astro.props;
+const { collection, type, searchable, multicols = 1 } = Astro.props;
 const jsonData = await getEntry("items", collection);
 const checklistCategories = processJSON(jsonData.data, type);
 
@@ -61,22 +61,8 @@ const columnClass = getMultiColClass(multicols);
                         data-id={item.id}
                         data-type={collection}
                     />
-                    {item.side_name && <span class="npc">({item.side_name})</span>}
                     <span class="text-sm peer-checked:line-through peer-checked:opacity-60 peer-disabled:opacity-50" class:list={item.class_name} set:html={item.name}></span>
                 </label>
-                {/* Sub Options */}
-                {item.options && item.options.length > 0 && (
-                    <ul class="options mt-4 ml-2" option-for={item.id}>
-                        {item.options.map(subOption => (
-                            <li>
-                                <label class="radio">
-                                    <input type="radio" class="peer" name={`${item.id}_`} data-id={subOption.option_id} data-conflict={subOption.conflicts_with}>
-                                    <span class="opacity-85 peer-checked:line-through peer-checked:opacity-60" set:html={subOption.text}></span>
-                                </label>
-                            </li>
-                        ))}
-                    </ul>
-                )}
             </li>
         ))}
         </ul>

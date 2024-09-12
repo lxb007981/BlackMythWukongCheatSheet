@@ -3,47 +3,36 @@ import BeerPage from "../layouts/BeerPage.astro";
 import Checklist from "../components/Checklist.astro";
 import ToggleHideCompleted from "../components/ToggleHideCompleted.astro";
 import CacheManage from "../components/CacheManage.astro";
-import GameSave from "../components/GameSave.astro";
 ---
 
 <BeerPage>
     <nav class="small-margin">
         <div class="tabs left-align max scroll">
             <a data-ui="#tabCollection">重要物品</a>
-            <a data-ui="#tabWalkthrough">流程</a>
+            <a data-ui="#tabWalkthrough">流程要点</a>
             <a data-ui="#tabEquipments">披挂</a>
             <a data-ui="#tabGoods">行囊</a>
             <a data-ui="#tabBosses">影神图</a>
             <a data-ui="#tabAbout">关于</a>
         </div>
-
-        <GameSave />
     </nav>
 
     <ToggleHideCompleted />
 
     <div class="page padding" id="tabCollection">
-        <Checklist collection="Collection" searchable type="Collection"/>
+        <Checklist collection="Collection" searchable type="items"/>
     </div>
 
     <div class="page padding" id="tabWalkthrough">
-
-        <nav class="tabbed small mb-4">
-            <a class="active" id="showMainQuest">本体</a>
-            <a class="" id="showDLCQuest">DLC</a>
-        </nav>
-
-        <div class="page active" id="tabMainQuest">
-            <Checklist collection="Walkthrough" searchable type="Walkthrough"/>
-        </div>
-        <div class="page" id="tabDLCQuest">
-            <Checklist collection="Quest" searchable type="Quest"/>
-        </div>
+        <Checklist collection="Walkthrough" searchable type="Walkthrough"/>
     </div>
 
-    <!-- Weapons -->
     <div class="page padding" id="tabEquipments">
-        <Checklist collection="Equipment" searchable multicols={4}/>
+        <Checklist collection="Equipment" searchable multicols={4} type="items"/>
+    </div>
+
+    <div class="page padding" id="tabGoods">
+        <Checklist collection="Good" searchable multicols={4} type="items"/>
     </div>
 
     <div class="page padding" id="tabBosses">
@@ -53,25 +42,14 @@ import GameSave from "../components/GameSave.astro";
     <div class="page padding" id="tabAbout">
         <article class="small middle-align center-align">
             <div>
-                <i class="extra">Forum</i>
-                <h5 class="center-align">加入讨论群</h5>
-                <p>672924061</p>
-            </div>
-        </article>
-
-        <article class="small middle-align center-align">
-            <div>
-                <i class="extra">Group</i>
-                <h5 class="center-align">Discord</h5>
-                <p><a href="https://discord.gg/wscgpgzeqm">https://discord.gg/wscgpgzeqm</a></p>
+                <h6>参考<span style="font-style: italic"><a href="https://github.com/imhlq/EldenRingCheatSheetCN">EldenRingCheatSheetCN</a></span></h6>
             </div>
         </article>
 
         <article class="medium middle-align center-align">
             <div>
                 <i class="extra">bug_report</i>
-                <h5 class="center-align">提交ISSUE</h5>
-                <p><a href="https://github.com/imhlq/EldenRingCheatSheetCN/issues">Github</a></p>
+                <h5 class="center-align"><a href="https://github.com/lxb007981/BlackMythWukongCheatSheet/issues">提交ISSUE</a></h5>
                 <div class="space"></div>
                 <CacheManage/>
             </div>
@@ -96,12 +74,7 @@ import GameSave from "../components/GameSave.astro";
                 localStorage.setItem('profiles', JSON.stringify(profiles));
 			});
 		});
-        document.querySelector('#showMainQuest').addEventListener('click', () => {
-            toggleQuest('main');
-        });
-        document.querySelector('#showDLCQuest').addEventListener('click', () => {
-            toggleQuest('dlc');
-        });
+
 
         window.addEventListener('profile-changed', reload);
         updateUI();
@@ -207,23 +180,4 @@ import GameSave from "../components/GameSave.astro";
 		}
 		document.querySelector(tabName).classList.add("active");
 	}
-
-    function toggleQuest(questType) {
-        const mainQuestBtn = document.querySelector('#showMainQuest');
-        const dlcQuestBtn = document.querySelector('#showDLCQuest');
-        const mainQuestTab = document.querySelector('#tabMainQuest');
-        const dlcQuestTab = document.querySelector('#tabDLCQuest');
-
-        if (questType === 'main') {
-            mainQuestBtn.classList.add('active');
-            dlcQuestBtn.classList.remove('active');
-            mainQuestTab.classList.add('active');
-            dlcQuestTab.classList.remove('active');
-        } else if (questType === 'dlc') {
-            mainQuestBtn.classList.remove('active');
-            dlcQuestBtn.classList.add('active');
-            mainQuestTab.classList.remove('active');
-            dlcQuestTab.classList.add('active');
-        }
-    }
 </script>

@@ -1,4 +1,4 @@
-import itemData from './item_data.json';
+const itemData = null
 
 export const getItemByName = (name) => {
   const items = itemData.filter(item => item.name === name);
